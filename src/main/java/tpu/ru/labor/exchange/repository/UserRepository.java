@@ -2,17 +2,17 @@ package tpu.ru.labor.exchange.repository;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import tpu.ru.labor.exchange.entity.Profile;
+import tpu.ru.labor.exchange.entity.User;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<Profile, String> {
+public interface UserRepository extends JpaRepository<User, String> {
 
     @EntityGraph(value = "graph.Profile.roles", type = EntityGraph.EntityGraphType.LOAD)
-    Optional<Profile> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    Optional<Profile> findByEmailAndPassword(String email, String password);
+    Optional<User> findByEmailAndPassword(String email, String password);
 
     int countByEmail(String email);
 

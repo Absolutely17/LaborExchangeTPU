@@ -10,7 +10,7 @@ import java.util.*;
 @NamedEntityGraph(name = "graph.Profile.roles", attributeNodes = @NamedAttributeNode("roles"))
 @Getter
 @NoArgsConstructor
-public class Profile {
+public class User {
 
     @Id
     @Column(name = "ID")
@@ -22,10 +22,10 @@ public class Profile {
     @Column(name = "PASSWORD")
     private String password;
 
-    @OneToMany(mappedBy = "profile")
-    private List<ProfileRole> roles;
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> roles;
 
-    public Profile(String email, String password) {
+    public User(String email, String password) {
         id = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;

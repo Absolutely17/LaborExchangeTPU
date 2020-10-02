@@ -7,7 +7,7 @@ import tpu.ru.labor.exchange.service.AuthService;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(value = "/profile")
+@RequestMapping(value = "/user")
 public class AuthRest {
 
     private final AuthService authService;

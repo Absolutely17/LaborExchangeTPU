@@ -2,8 +2,6 @@ package tpu.ru.labor.exchange.rest;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -11,7 +9,7 @@ import java.util.Date;
 public class RootRest {
 
     @GetMapping
-    public String getCurrentTime() {
+    public String checkServiceStatus() {
         return "Service worked.";
     }
 }

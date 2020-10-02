@@ -1,7 +1,6 @@
 package tpu.ru.labor.exchange.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tpu.ru.labor.exchange.dao.request.*;
@@ -36,7 +35,7 @@ public class AuthService {
 
     public AuthResponseDto login(AuthRequestDto requestDto) {
         log.debug("Login in system.", requestDto.toString());
-        boolean isSuccessLogin = findByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword());
+        boolean isSuccessLogin = isSuccessLoginWithEmailAndPass(requestDto.getEmail(), requestDto.getPassword());
         if (isSuccessLogin) {
             log.debug("Login success.");
             String token = jwtProvider.generateAccessToken(requestDto.getEmail());
@@ -47,8 +46,8 @@ public class AuthService {
         }
     }
 
-    private boolean findByEmailAndPassword(String email, String password) {
-        Profile user = userRepository.findByEmail(email).orElse(null);
+    private boolean isSuccessLoginWithEmailAndPass(String email, String password) {
+        User user = userRepository.findByEmail(email).orElse(null);
         if (user != null) {
             return passwordEncoder.matches(password, user.getPassword());
         }
@@ -59,12 +58,12 @@ public class AuthService {
         log.debug("Register in system.", requestDto.toString());
         if (isAvailableEmail(requestDto.getEmail())) {
             log.debug("Email available. Continue register new user.");
-            Profile user = new Profile(
+            User user = new User(
                     requestDto.getEmail(),
                     passwordEncoder.encode(requestDto.getPassword())
             );
             user = userRepository.save(user);
-            ProfileRole role = new ProfileRole(user, "ROLE_USER");
+            UserRole role = new UserRole(user, "ROLE_USER");
             roleRepository.save(role);
             return new ProfileResponseDto(user.getEmail());
         } else {

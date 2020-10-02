@@ -9,7 +9,7 @@ import java.util.UUID;
 @Table(name = "PROFILE_ROLE")
 @Getter
 @NoArgsConstructor
-public class ProfileRole {
+public class UserRole {
 
     @Id
     @Column(name = "ID")
@@ -17,14 +17,14 @@ public class ProfileRole {
 
     @ManyToOne
     @JoinColumn(name = "PROFILE_ID", nullable = false)
-    private Profile profile;
+    private User user;
 
     @Column(name = "ROLE")
     private String role;
 
-    public ProfileRole(Profile profile, String role) {
+    public UserRole(User user, String role) {
         id = UUID.randomUUID().toString();
-        this.profile = profile;
+        this.user = user;
         this.role = role;
     }
 

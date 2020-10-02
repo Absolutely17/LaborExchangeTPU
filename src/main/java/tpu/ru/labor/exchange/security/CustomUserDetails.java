@@ -3,7 +3,7 @@ package tpu.ru.labor.exchange.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import tpu.ru.labor.exchange.entity.Profile;
+import tpu.ru.labor.exchange.entity.User;
 
 import java.util.*;
 
@@ -20,10 +20,10 @@ public class CustomUserDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public CustomUserDetails(Profile profile) {
-        email = profile.getEmail();
-        password = profile.getPassword();
-        grantedAuthorities = profile.getRoles()
+    public CustomUserDetails(User user) {
+        email = user.getEmail();
+        password = user.getPassword();
+        grantedAuthorities = user.getRoles()
                 .stream()
                 .map(it -> new SimpleGrantedAuthority(it.getRole()))
                 .collect(toList());
