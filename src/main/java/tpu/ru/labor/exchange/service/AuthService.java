@@ -64,7 +64,7 @@ public class AuthService {
                     passwordEncoder.encode(requestDto.getPassword())
             );
             user = userRepository.save(user);
-            ProfileRole role = new ProfileRole(user, "ROLE_ADMIN");
+            ProfileRole role = new ProfileRole(user, "ROLE_USER");
             roleRepository.save(role);
             return new ProfileResponseDto(user.getEmail());
         } else {

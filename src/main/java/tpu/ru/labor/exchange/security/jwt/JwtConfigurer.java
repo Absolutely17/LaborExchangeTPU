@@ -7,6 +7,10 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tpu.ru.labor.exchange.security.CustomUserDetailsService;
 
+/**
+ * Created by SuhorukovIO on 02.10.2020
+ * Конфигурация фильтра
+ */
 @Configuration
 public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 

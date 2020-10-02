@@ -8,6 +8,9 @@ import tpu.ru.labor.exchange.repository.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * Сервис по созданию CustomUserDetails
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

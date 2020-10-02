@@ -6,11 +6,12 @@ import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import tpu.ru.labor.exchange.security.jwt.JwtConfigurer;
 
+/**
+ * Конфигурация Spring Security
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private static final String ROOT_PATH = "/api/v1";
 
     public SecurityConfig(JwtConfigurer jwtConfigurer) {
         super();
@@ -21,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+        // Убираем фильтрацию запросов по РЕСТам, связанным с профилем
         web.ignoring().antMatchers("/profile/**");
     }
 

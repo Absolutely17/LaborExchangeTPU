@@ -7,9 +7,11 @@ import tpu.ru.labor.exchange.entity.Profile;
 
 import java.util.*;
 
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Реализация UserDetails, которая нужна для аутентификации
+ */
 public class CustomUserDetails implements UserDetails {
 
     private String email;
@@ -17,13 +19,6 @@ public class CustomUserDetails implements UserDetails {
     private String password;
 
     private Collection<? extends GrantedAuthority> grantedAuthorities;
-
-
-    public CustomUserDetails(String email, String password, String role) {
-        this.email = email;
-        this.password = password;
-        grantedAuthorities = singletonList(new SimpleGrantedAuthority(role));
-    }
 
     public CustomUserDetails(Profile profile) {
         email = profile.getEmail();
