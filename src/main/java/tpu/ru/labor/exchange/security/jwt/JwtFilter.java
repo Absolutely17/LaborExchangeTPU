@@ -37,7 +37,7 @@ private final JwtProvider jwtProvider;
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws IOException, ServletException {
-        String token = jwtProvider.getTokenFromRequest(request);
+        String token = jwtProvider.getTokenFromCookie(request);
         if (token != null && jwtProvider.isValidToken(token)) {
             String userEmail = jwtProvider.getEmailFromToken(token);
             if (userEmail != null && !userEmail.isBlank()) {

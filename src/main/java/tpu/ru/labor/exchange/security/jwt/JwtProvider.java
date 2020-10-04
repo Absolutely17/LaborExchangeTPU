@@ -4,8 +4,10 @@ import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Component;
-import tpu.ru.labor.exchange.repository.UserRepository;
+import tpu.ru.labor.exchange.dao.Token;
+import tpu.ru.labor.exchange.utils.CookieUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
@@ -25,39 +27,72 @@ public class JwtProvider {
 
     private static final SecureRandom random = new SecureRandom();
 
-    private static final String ALL_SYMBOLS_TO_GENERATE = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/*&^$@!";
-
     private static final String AUTHORIZATION = "Authorization";
 
-    @Value("$(jwt.secret)")
+    private static final long CONVERT_TO_SECONDS = 24L * 60L * 60L;
+
+    private final CookieUtil cookieUtil;
+
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration.access.token:7}")
+    @Value("${jwt.accessToken.expiration:7}")
     private long expAccessToken;
+
+    @Value("${jwt.refreshToken.expiration:15}")
+    private long expRefreshToken;
+
+    public JwtProvider(CookieUtil cookieUtil) {
+        this.cookieUtil = cookieUtil;
+    }
 
     /**
      * Формируем токен доступа
+     *
      * @param email адрес эл. почты для которого нужно сделать токен
      * @return токен
      */
-    public String generateAccessToken(String email) {
+    public Token generateAccessToken(String email) {
         log.info("Starting generate access token, email {}, expiration time {}d", email, expAccessToken);
         Date date = Date.from(LocalDate.now().plusDays(expAccessToken)
                 .atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return Jwts.builder()
+        String tokenValue = Jwts.builder()
                 .setSubject(email)
                 .setExpiration(date)
-                .claim("salt", generateRandomSalt())
+                .setIssuedAt(new Date())
                 .signWith(HS512, jwtSecret)
                 .compact();
+        return new Token(tokenValue, expAccessToken * CONVERT_TO_SECONDS);
+    }
+
+    /**
+     * Формируем рефреш токен
+     *
+     * @param email адрес эл. почты для которого нужно сделать токен
+     * @return токен
+     */
+    public Token generateRefreshToken(String email) {
+        log.info("Starting generate refresh token, email {}, expiration time {}d", email, expRefreshToken);
+        Date date = Date.from(LocalDate.now().plusDays(expRefreshToken)
+                .atStartOfDay(ZoneId.systemDefault()).toInstant());
+        String secret = KeyGenerators.string().generateKey();
+        String tokenValue = Jwts.builder()
+                .setSubject(email)
+                .setExpiration(date)
+                .setIssuedAt(new Date())
+                .claim("secret", secret)
+                .signWith(HS512, jwtSecret)
+                .compact();
+        return new Token(tokenValue, expRefreshToken * CONVERT_TO_SECONDS, secret);
     }
 
     /**
      * Проверяем токен на валидность
+     *
      * @param token токен, который нужно проверить
      * @return true - валидный, false - не валидный
      */
-    public boolean isValidToken(String token) {
+    boolean isValidToken(String token) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
@@ -75,17 +110,7 @@ public class JwtProvider {
         return false;
     }
 
-    private static String generateRandomSalt() {
-        StringBuilder sb = new StringBuilder();
-        int lengthSalt = random.nextInt(15 - 10) + 10;
-        for (int i = 0; i < lengthSalt; i++) {
-            sb.append(ALL_SYMBOLS_TO_GENERATE.charAt(random.nextInt(ALL_SYMBOLS_TO_GENERATE.length())));
-        }
-        return sb.toString();
-    }
-
     /**
-     * Created by SuhorukovIO on 02.10.2020
      * Вытаскиваем токен из заголовка запроса
      * @param servletRequest запрос
      * @return токен
@@ -102,7 +127,26 @@ public class JwtProvider {
     }
 
     /**
+     * Достаем токен из куки
+     *
+     * @param servletRequest запрос
+     * @return токен
+     */
+    @Nullable
+    String getTokenFromCookie(HttpServletRequest servletRequest) {
+        log.debug("Getting token from cookie.");
+        String accessToken = cookieUtil.getTokenFromCookie(servletRequest.getCookies());
+        if (accessToken == null) {
+            log.error("Token does not found in cookie request.");
+            return null;
+        } else {
+            return accessToken;
+        }
+    }
+
+    /**
      * Достаем эл. почту из токена
+     *
      * @param token токен из которого вытаскивать необходимо
      * @return эл. почта
      */

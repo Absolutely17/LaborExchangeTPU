@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tpu.ru.labor.exchange.entity.User;
 
-import java.util.*;
+import java.util.Collection;
 
 import static java.util.stream.Collectors.toList;
 
@@ -20,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public CustomUserDetails(User user) {
+    CustomUserDetails(User user) {
         email = user.getEmail();
         password = user.getPassword();
         grantedAuthorities = user.getRoles()

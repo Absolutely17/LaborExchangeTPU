@@ -1,5 +1,6 @@
 package tpu.ru.labor.exchange.dao.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,6 +12,13 @@ public class AuthRequestDto {
     private String email;
 
     private String password;
+
+    private boolean isRemember;
+
+    @JsonProperty("isRemember")
+    public boolean isRemember() {
+        return isRemember;
+    }
 
     @Override
     public String toString() {

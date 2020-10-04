@@ -22,8 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        // Убираем фильтрацию запросов по РЕСТам, связанным с профилем
-        web.ignoring().antMatchers("/user/**");
+        // Убираем фильтрацию запросов по РЕСТам, связанным с аутентификацией/регистрацией
+        web.ignoring().antMatchers("/user/login", "/user/register");
     }
 
     @Override
