@@ -1,0 +1,25 @@
+spring:
+  jpa:
+    hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties.hibernate.globally_quoted_identifiers: true
+  profiles:
+    active: dev
+
+jwt:
+  accessToken:
+    # Срок действия в днях
+    expiration: 7
+    # Название куки
+    cookieName: accessToken
+  refreshToken:
+    # Срок действия в днях
+    expiration: 15
+    # Название куки
+    cookieName: refreshToken
+  secret: 9z$C&F)J@NcRfUjXn2r4u7x!A%D*G-KaPdSgVkYp3s6v8y/B?E(H+MbQeThWmZq4
+
+
+server:
+  servlet:
+    # Задаем базовый путь для сервиса
+    context-path: /api/v1
