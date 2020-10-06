@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Component;
-import tpu.ru.labor.exchange.dao.Token;
+import tpu.ru.labor.exchange.dto.auth.Token;
 import tpu.ru.labor.exchange.utils.CookieUtil;
 
 import javax.servlet.http.HttpServletRequest;

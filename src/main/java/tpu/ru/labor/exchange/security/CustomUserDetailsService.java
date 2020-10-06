@@ -3,8 +3,8 @@ package tpu.ru.labor.exchange.security;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
-import tpu.ru.labor.exchange.entity.User;
-import tpu.ru.labor.exchange.repository.UserRepository;
+import tpu.ru.labor.exchange.entity.user.User;
+import tpu.ru.labor.exchange.repository.user.UserRepository;
 
 import java.util.Optional;
 

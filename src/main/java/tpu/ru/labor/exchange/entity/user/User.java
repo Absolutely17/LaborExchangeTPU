@@ -1,4 +1,4 @@
-package tpu.ru.labor.exchange.entity;
+package tpu.ru.labor.exchange.entity.user;
 
 import lombok.*;
 

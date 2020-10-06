@@ -1,8 +1,8 @@
-package tpu.ru.labor.exchange.repository;
+package tpu.ru.labor.exchange.repository.user;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import tpu.ru.labor.exchange.entity.User;
+import tpu.ru.labor.exchange.entity.user.User;
 
 import java.util.Optional;
 

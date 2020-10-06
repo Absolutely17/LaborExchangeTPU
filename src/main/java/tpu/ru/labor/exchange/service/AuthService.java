@@ -1,8 +1,8 @@
 package tpu.ru.labor.exchange.service;
 
 import org.springframework.http.ResponseEntity;
-import tpu.ru.labor.exchange.dao.request.*;
-import tpu.ru.labor.exchange.dao.response.ProfileResponseDto;
+import tpu.ru.labor.exchange.dto.auth.request.*;
+import tpu.ru.labor.exchange.dto.user.response.ProfileResponseDto;
 
 /**
  * Created by SuhorukovIO on 04.10.2020

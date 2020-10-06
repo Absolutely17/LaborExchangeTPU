@@ -1,4 +1,4 @@
-package tpu.ru.labor.exchange.dao.request;
+package tpu.ru.labor.exchange.dto.auth.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

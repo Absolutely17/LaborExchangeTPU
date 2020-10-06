@@ -23,3 +23,7 @@ server:
   servlet:
     # Задаем базовый путь для сервиса
     context-path: /api/v1
+
+logging:
+  level:
+    tpu.ru.labor.exchange: DEBUG

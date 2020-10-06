@@ -1,4 +1,4 @@
-package tpu.ru.labor.exchange.dao.response;
+package tpu.ru.labor.exchange.dto.auth.response;
 
 import lombok.*;
 

@@ -1,8 +1,8 @@
-package tpu.ru.labor.exchange.rest;
+package tpu.ru.labor.exchange.rest.test;
 
 import org.springframework.web.bind.annotation.*;
-import tpu.ru.labor.exchange.entity.User;
-import tpu.ru.labor.exchange.repository.UserRepository;
+import tpu.ru.labor.exchange.entity.user.User;
+import tpu.ru.labor.exchange.repository.user.UserRepository;
 import tpu.ru.labor.exchange.security.jwt.JwtProvider;
 
 @RestController

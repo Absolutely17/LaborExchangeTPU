@@ -1,15 +1,16 @@
-package tpu.ru.labor.exchange.service.impl;
+package tpu.ru.labor.exchange.service.impl.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tpu.ru.labor.exchange.dao.Token;
-import tpu.ru.labor.exchange.dao.request.*;
-import tpu.ru.labor.exchange.dao.response.ProfileResponseDto;
-import tpu.ru.labor.exchange.entity.*;
-import tpu.ru.labor.exchange.repository.*;
+import tpu.ru.labor.exchange.dto.auth.Token;
+import tpu.ru.labor.exchange.dto.auth.request.*;
+import tpu.ru.labor.exchange.dto.user.response.ProfileResponseDto;
+import tpu.ru.labor.exchange.entity.user.*;
+import tpu.ru.labor.exchange.mapper.UserMapper;
+import tpu.ru.labor.exchange.repository.user.*;
 import tpu.ru.labor.exchange.security.jwt.JwtProvider;
 import tpu.ru.labor.exchange.service.AuthService;
 import tpu.ru.labor.exchange.utils.CookieUtil;
@@ -30,26 +31,30 @@ public class AuthServiceImpl implements AuthService {
 
     private final CookieUtil cookieUtil;
 
+    private final UserMapper userMapper;
+
     public AuthServiceImpl(
             UserRepository userRepository,
             JwtProvider jwtProvider,
             PasswordEncoder passwordEncoder,
             RoleRepository roleRepository,
-            CookieUtil cookieUtil
+            CookieUtil cookieUtil,
+            UserMapper userMapper
     ) {
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.cookieUtil = cookieUtil;
+        this.userMapper = userMapper;
     }
 
     @Override
     public ResponseEntity<?> login(AuthRequestDto requestDto) {
-        log.debug("Login in system.", requestDto.toString());
+        log.debug("Login in system. {}", requestDto.toString());
         boolean isSuccessLogin = findByEmailAndPassword(requestDto.getEmail(), requestDto.getPassword());
         if (isSuccessLogin) {
-            log.debug("Login success.");
+            log.debug("Login success {}.", requestDto.getEmail());
             Token accessToken = jwtProvider.generateAccessToken(requestDto.getEmail());
             HttpHeaders responseHeaders = new HttpHeaders();
             if (requestDto.isRemember()) {
@@ -89,26 +94,15 @@ public class AuthServiceImpl implements AuthService {
         log.debug("Register in system.", requestDto.toString());
         if (isAvailableEmail(requestDto.getEmail())) {
             log.debug("Email available. Continue register new user.");
-            User user = convertRegisterRequestToUser(requestDto);
+            User user = userMapper.convertToUserFromRegisterRequest(requestDto);
             user = userRepository.save(user);
             UserRole role = new UserRole(user, "ROLE_USER");
             roleRepository.save(role);
-            return new ProfileResponseDto(user);
+            return userMapper.convertToProfileResponse(user);
         } else {
             log.error("Email is not available.");
             throw new IllegalArgumentException("Email is not available.");
         }
-    }
-
-    private User convertRegisterRequestToUser(RegisterRequestDto requestDto) {
-        return new User(
-                requestDto.getEmail(),
-                passwordEncoder.encode(requestDto.getPassword()),
-                requestDto.getFirstName(),
-                requestDto.getMiddleName(),
-                requestDto.getSecondName(),
-                requestDto.getSex()
-        );
     }
 
     /**

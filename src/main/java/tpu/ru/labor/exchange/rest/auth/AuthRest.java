@@ -1,9 +1,9 @@
-package tpu.ru.labor.exchange.rest;
+package tpu.ru.labor.exchange.rest.auth;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tpu.ru.labor.exchange.dao.request.*;
-import tpu.ru.labor.exchange.dao.response.ProfileResponseDto;
+import tpu.ru.labor.exchange.dto.auth.request.*;
+import tpu.ru.labor.exchange.dto.user.response.ProfileResponseDto;
 import tpu.ru.labor.exchange.service.AuthService;
 
 /**
